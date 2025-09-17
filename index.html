@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dokumentasi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: skyblue;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
+    header {
+      background: #6666CC;
+      color: white;
+      width: 100%;
+      text-align: center;
+      padding: 20px 0;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .upload-box {
+      background: white;
+      margin: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 500px;
+    }
+    .upload-box input[type=file] {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .preview {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .preview img, .preview video {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-upload { background: #1d9bf0; color: white; }
+    .btn-delete { background: #e0245e; color: white; }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      width: 90%;
+      margin-bottom: 30px;
+    }
+    .gallery-item {
+      background: black;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .gallery-item img, .gallery-item video {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>Dokumentasi Pengecekan Kotak Saran Kantin SMAN 1 Jepara</header>  <div class="upload-box">
+    <input type="file" id="fileInput" accept="image/*,video/*">
+    <div class="preview" id="preview"></div>
+    <div style="text-align:center;">
+      <button class="btn-upload" onclick="uploadFile()">Upload</button>
+      <button class="btn-delete" onclick="resetPreview()">Hapus</button>
+    </div>
+  </div>  <div class="gallery" id="gallery"></div>  <script>
+    let selectedFile = null;
+
+    const fileInput = document.getElementById("fileInput");
+    const preview = document.getElementById("preview");
+    const gallery = document.getElementById("gallery");
+
+    fileInput.addEventListener("change", function() {
+      preview.innerHTML = "";
+      selectedFile = this.files[0];
+
+      if (selectedFile) {
+        const fileURL = URL.createObjectURL(selectedFile);
+
+        if (selectedFile.type.startsWith("image")) {
+          preview.innerHTML = `<img src="${fileURL}" alt="Preview">`;
+        } else if (selectedFile.type.startsWith("video")) {
+          preview.innerHTML = `<video controls><source src="${fileURL}" type="${selectedFile.type}"></video>`;
+        }
+      }
+    });
+
+    function uploadFile() {
+      if (!selectedFile) {
+        alert("Silakan pilih file terlebih dahulu!");
+        return;
+      }
+
+      const fileURL = URL.createObjectURL(selectedFile);
+      const item = document.createElement("div");
+      item.classList.add("gallery-item");
+
+      if (selectedFile.type.startsWith("image")) {
+        item.innerHTML = `<img src="${fileURL}" alt="Uploaded">`;
+      } else if (selectedFile.type.startsWith("video")) {
+        item.innerHTML = `<video controls><source src="${fileURL}" type="${selectedFile.type}"></video>`;
+      }
+
+      gallery.appendChild(item);
+      resetPreview();
+    }
+
+    function resetPreview() {
+      fileInput.value = "";
+      preview.innerHTML = "";
+      selectedFile = null;
+    }
+  </script></body>
+</html>
